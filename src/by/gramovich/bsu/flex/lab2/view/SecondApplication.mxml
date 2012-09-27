@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   width="100%" height="100%">	
+	
+	<fx:Script>
+		<![CDATA[
+			import by.gramovich.bsu.flex.lab2.controller.SecondController;
+			[Bindable]
+			var controller:SecondController = new SecondController();
+		]]>
+	</fx:Script>
+	
+	<s:VGroup horizontalCenter="0" verticalCenter="0" verticalAlign="top" y="0" x="0">
+		<s:Label text="External Data:"/>		
+		<s:TextArea text="@{controller.model.externalData}" editable="false" minWidth="600" minHeight="200"/>					
+		
+		<s:Label text="String to send:"/>	
+		<s:HGroup verticalAlign="middle" width="100%">			
+			<s:TextInput text="@{controller.model.dataToSend}" width="100%"/>
+			<s:Button label="Send" click="{controller.sendMessage_clickHandler(event)}" />
+		</s:HGroup>
+					
+	</s:VGroup>
+	
+</s:Application>
