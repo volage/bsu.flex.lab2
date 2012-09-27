@@ -2,59 +2,64 @@
 <s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
 			   xmlns:s="library://ns.adobe.com/flex/spark"
 			   xmlns:mx="library://ns.adobe.com/flex/mx"
-			   width="100%" height="100%">	
+			   minWidth="955" minHeight="600" backgroundColor="gray">
+	<fx:Declarations>
+		<!-- Place non-visual elements (e.g., services, value objects) here -->
+	</fx:Declarations>
 	<fx:Script>
 		<![CDATA[
 			import by.gramovich.bsu.flex.lab2.controller.FirstController;
 			[Bindable]
-			var controller:FirstController = new FirstController();
+			private var controller:FirstController = new FirstController();
 		]]>
 	</fx:Script>
-	
-	<s:VGroup horizontalCenter="0" verticalCenter="0" verticalAlign="top" y="0" x="0">
+	<s:VGroup top="10" width="1000" height="1000" >
+					
 		<s:Label text="XML:"/>		
-		<s:TextArea editable="false" minWidth="700" minHeight="200" text="{controller.model.xmlBase}"/>					
+		<s:TextArea width="1000" height="200" editable="false" text="{controller.model.xml}"/>					
 		
-		<s:HGroup horizontalAlign="left" horizontalCenter="0" verticalAlign="middle">
+		<s:HGroup>
 			<s:Label text="Square"/>
-			<s:ComboBox width="100%" 
-						selectedItem="@{controller.model.selectedOperation}" 
-						dataProvider="{controller.model.comparisonOperations}"/>
-			<s:TextInput restrict="0-9" text="@{controller.model.selectedSquare}"/>
-			<s:Button label="Select" click="{controller.selectSquare_clickHandler(event)}"/>
+			
+			<s:ComboBox width="100%" dataProvider="{controller.model.comparisonOperations}"
+						selectedItem="@{controller.model.selectedComparison}"/>
+			
+			<s:TextInput restrict="0-9" text="@{controller.model.squareInput}"/>
+			
+			<s:Button label="Select" click="{controller.selectBySquare(event)}"/>
 		</s:HGroup>
 		
 		<s:Line width="100%">
 			<s:stroke>
-				<s:SolidColorStroke color="0x000000" weight="1"/>
-			</s:stroke>	
+				<s:SolidColorStroke color="black"/>
+			</s:stroke>
 		</s:Line>
 		
 		<s:HGroup horizontalAlign="left" horizontalCenter="0" verticalAlign="middle">
 			<s:Label text="Type"/>
-			<s:ComboBox selectedItem="@{controller.model.selectedType}" 
-						dataProvider="{controller.model.types}"/>			
-			<s:Button label="Select" click="{controller.selectType_clickHandler(event)}"/>
+			<s:ComboBox dataProvider="{controller.model.types}"
+						selectedItem="@{controller.model.selectedType}"/>			
+			<s:Button label="Select" click="{controller.selectByType(event)}"/>
 		</s:HGroup>
 		
 		<s:Line width="100%">
 			<s:stroke>
-				<s:SolidColorStroke color="0x000000" weight="1"/>
-			</s:stroke>	
+				<s:SolidColorStroke color="black"/>
+			</s:stroke>
 		</s:Line>
 		
 		<s:Label text="Selection:"/>
-		<s:TextArea editable="false" width="100%" text="@{controller.model.messageToSend}"/>				
-		<s:Button label="Send Selection" click="{controller.sendSelection_clickHandler(event)}"/>
+		<s:TextArea width="100%" editable="false" text="@{controller.model.selection}"/>				
+		<s:Button label="Send Selection" click="{controller.sendSelection(event)}"/>
 		
 		<s:Line width="100%">
 			<s:stroke>
-				<s:SolidColorStroke color="0x000000" weight="1"/>
-			</s:stroke>	
+				<s:SolidColorStroke color="black"/>
+			</s:stroke>
 		</s:Line>
 		
 		<s:Label text="Text from another application:"/>
-		<s:Label text="@{controller.model.externalData}"/>
+		<s:Label text="@{controller.model.recievedData}"/>
 		
 		
 	</s:VGroup>

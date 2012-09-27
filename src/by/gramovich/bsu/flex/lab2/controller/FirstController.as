@@ -11,114 +11,121 @@ package by.gramovich.bsu.flex.lab2.controller
 	
 	import mx.controls.Alert;
 
+	/**
+	 * Controller for first application
+	 */
 	public class FirstController
 	{
 		
-		public static const XML_URL:String = "data.xml";					
-		private var appModel:FirstModel = new FirstModel();				
-		private var connSender:LocalConnection;
-		private var connReceiver:LocalConnection;		
+		public var model:FirstModel = FirstModel.getInstance();		
 		
+		public static const XML_URL:String = "data.xml";			
+		private var sender:LocalConnection;
+		private var resievier:LocalConnection;		
+		
+		/**
+		 * Initialize sender, resiever and xml data
+		 */
 		public function FirstController()
 		{
-			connSender = new LocalConnection();
-			connSender.addEventListener(StatusEvent.STATUS, onStatus);
+			sender = new LocalConnection();
 			
-			connReceiver = new LocalConnection();
-			connReceiver.allowDomain("*");
-			connReceiver.client = this;
+			resievier = new LocalConnection();
+			resievier.allowDomain("*");
+			resievier.client = this;
 			try {
-				connReceiver.connect("app1conn");
+				resievier.connect("FirstApplication");
 			} catch(error:ArgumentError) {
-				Alert.show("Unable to connect");
+				trace("Unable to connect");
 			}
 			
-			loadXML();		
+			var loader:URLLoader = new URLLoader(new URLRequest(XML_URL));
+			loader.addEventListener(Event.COMPLETE, onXMLLoad);				
 		}
 		
-		private function loadXML():void
-		{			
-			var request:URLRequest = new URLRequest(XML_URL);
-			var loader:URLLoader = new URLLoader(request);
-			loader.addEventListener(Event.COMPLETE, onXMLLoadComplete);			
-		}
-		
-		public function updateExternalData(message:String):void
+		/**
+		 * Load types after xml will be loaded
+		 */
+		private function onXMLLoad(event:Event):void
 		{
-			this.appModel.externalData = message;
-		}
-		
-		private function onXMLLoadComplete(event:Event):void
-		{
-			appModel.xmlBase = new XML(event.target.data);
+			model.xml = new XML(event.target.data);
 			var typeStr:String;
-			for each (var type in appModel.xmlBase..@type)
-			{				
+			for each (var type in model.xml..@type)
+			{		
 				typeStr = type.toString();
-				if (!appModel.types.contains(typeStr))
+				if (!model.types.contains(typeStr))
 				{
-					appModel.types.addItem(typeStr);
+					model.types.addItem(typeStr);
 				}
 			}
 		}						
 		
-		public function selectSquare_clickHandler(event:MouseEvent):void
+		/**
+		 * Select by select operation and square input
+		 */
+		public function selectBySquare(event:MouseEvent):void
 		{							
 			var selection:XML = <selection></selection>;
-			var square:int = parseInt(appModel.selectedSquare);			
-			for each (var pod:XML in appModel.xmlBase..pod.(isValidSquare(square, @height, @width)))
+			var square:int = parseInt(model.squareInput);			
+			for each (var pod:XML in model.xml..pod.(isValidSquare(square, @height, @width)))
 			{								
 				selection.appendChild(pod);
 			}
-			appModel.messageToSend = selection.toString();
+			model.selection = selection.toString();
 						
 		}
 		
-		public function selectType_clickHandler(event:MouseEvent):void
+		/**
+		 * Select pods with valid by selected condition squere
+		 */
+		public function selectByType(event:MouseEvent):void
 		{
 			var selection:XML = <selection></selection>;
-			for each (var pod:XML in appModel.xmlBase..pod.(@type == appModel.selectedType))
+			for each (var pod:XML in model.xml..pod.(@type == appModel.selectedType))
 			{				
 				selection.appendChild(pod);
 			}
-			appModel.messageToSend = selection.toString();
+			model.selection = selection.toString();
 		}
 		
-		public function sendSelection_clickHandler(event:MouseEvent):void
+		/**
+		 * Send selection to second application
+		 */
+		public function sendSelection(event:MouseEvent):void
 		{
-			connSender.send("app2conn", "updateExternalData", this.appModel.messageToSend);			
+			sender.send("SecondApplication", "updateExternalData", this.model.selection);			
 		}
 		
+		/**
+		 * Check square by selected operation
+		 */
 		private function isValidSquare(square:int, height:int, width:int):Boolean
 		{
-			
-			switch(appModel.selectedOperation) 
-			{
-				case "<":
-					return height * width < square;					
-				case "<=":
-					return height * width <= square;					
-				case "=":
-					return height * width == square;					
-				case ">=":
-					return height * width >= square;					
-				case ">":
-					return height * width > square;					
-			}
-			return false;
+			if (model.selectedComparison.data in this) {
+				return this[model.selectedComparison.data](square, height, width);
+			} else return false;
 		}
 		
-		public function get model():FirstModel
+		private function greater(square:int, height:int, width:int):Boolean {
+			return height * width > square;
+		}
+		private function greaterOrEquals(square:int, height:int, width:int):Boolean {
+			return height * width >= square;
+		}
+		private function equals(square:int, height:int, width:int):Boolean {
+			return height * width == square;
+		}
+		private function lower(square:int, height:int, width:int):Boolean {
+			return height * width < square;
+		}
+		private function lowerOrEquals(square:int, height:int, width:int):Boolean {
+			return height * width <= square;
+		}		
+		
+		public function receiveData(message:String):void
 		{
-			return this.appModel;		
+			this.model.recievedData = message;
 		}
 		
-		private function onStatus(event:StatusEvent):void {
-			switch (event.level) {				
-				case "error":
-					Alert.show("Unable to send message to App 2");
-					break;
-			}
-		}
 	}
 }

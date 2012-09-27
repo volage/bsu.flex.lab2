@@ -1,0 +1,22 @@
+<view>
+	<view id="view1" title="KM Portal">
+		<pod width="100" height="100" visible="true" minimized="false" type="gadget" title="About KM" id="view1pod1"/>
+		<pod width="120" height="200" visible="true" minimized="false" type="search" title="Search" id="view1pod2"/>
+		<pod width="200" height="80" visible="true" minimized="true" type="gadget" title="CoP Links" id="view1pod3"/>
+		<pod width="400" height="100" visible="false" minimized="false" type="gadget" title="Help" id="view1pod4"/>
+	</view>
+	<view id="view2" title="My Office">
+		<pod width="100" height="150" visible="true" minimized="false" type="rss" title="CNN" id="view2pod1"/>
+		<pod width="300" height="300" visible="true" minimized="false" type="gadget" title="My Links" id="view2pod2"/>
+		<pod width="100" height="30" visible="true" minimized="true" type="gadget" title="KM Members" id="view2pod3"/>
+		<pod width="240" height="100" visible="false" minimized="false" type="rss" title="Latest News" id="view2pod4"/>
+		<pod width="50" height="400" visible="false" minimized="false" type="gadget" title="Report" id="view2pod5"/>
+		<pod width="135" height="140" visible="false" minimized="true" type="mail" title="My Inbox" id="view2pod6"/>
+		<pod width="180" height="145" visible="false" minimized="false" type="gadget" title="Haissam" id="view2pod7"/>
+	</view>
+	<view id="view3" title="For Testing"/>
+	<view id="view4" title="Configuration">
+		<pod width="500" height="400" visible="true" minimized="false" type="gadget" title="Configuration" id="view4pod1"/>
+	</view>
+	<view id="view5" title="New Tab"/>
+</view>

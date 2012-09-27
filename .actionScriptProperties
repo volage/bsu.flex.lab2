@@ -14,9 +14,9 @@
     <sourceAttachmentPath/>
   </compiler>
   <applications>
+    <application path="Main.mxml"/>
     <application path="by/gramovich/bsu/flex/lab2/view/FirstApplication.mxml"/>
     <application path="by/gramovich/bsu/flex/lab2/view/SecondApplication.mxml"/>
-    <application path="Main.mxml"/>
   </applications>
   <modules/>
   <buildCSSFiles/>

@@ -1,13 +1,27 @@
 package by.gramovich.bsu.flex.lab2.model
 {
+	/**
+	 * Model for data from second application
+	 */
 	public class SecondModel
 	{
-		[Bindable]
-		public var externalData:String;
+		private static var instance:SecondModel;
 		
 		[Bindable]
-		public var dataToSend:String;
+		public var recievedlData:String;
 		
-		public function SecondModel() { }
+		[Bindable]
+		public var sendInput:String;
+		
+		public function SecondModel() { 
+			instance = this;
+		}
+		
+		public static function getInstance():SecondModel {
+			if (instance == null) {
+				return new SecondModel();
+			}
+			return instance;
+		}
 	}
 }

@@ -8,50 +8,38 @@ package by.gramovich.bsu.flex.lab2.controller
 	
 	import mx.controls.Alert;
 
+	/**
+	 * Controller for second application
+	 */
 	public class SecondController
 	{
 		
-		private var appModel:SecondModel = new SecondModel();
-		private var connSender:LocalConnection;
-		private var connReceiver:LocalConnection;		
+		public var model:SecondModel = SecondModel.getInstance();
+		private var sender:LocalConnection;
+		private var receiver:LocalConnection;		
 		
 		public function SecondController()
 		{			
-			connSender = new LocalConnection();
-			connSender.addEventListener(StatusEvent.STATUS, onStatus);
+			sender = new LocalConnection();
 			
-			connReceiver = new LocalConnection();
-			connReceiver.allowDomain("*");
-			connReceiver.client = this;
+			receiver = new LocalConnection();
+			receiver.allowDomain("*");
+			receiver.client = this;
 			try {
-				connReceiver.connect("app2conn");
+				receiver.connect("SecondApplication");
 			} catch(error:ArgumentError) {
-				Alert.show("Unable to connect");
+				trace("Unable to connect");
 			}
-		}			
-		
-		public function updateExternalData(message:String):void
-		{
-			this.appModel.externalData = message;
 		}
 		
-		public function sendMessage_clickHandler(event:MouseEvent):void
+		public function sendMessage(event:MouseEvent):void
 		{
-			connSender.send("app1conn", "updateExternalData", this.appModel.dataToSend);	
-		}
+			sender.send("FirstApplication", "updateExternalData", this.model.sendInput);	
+		}	
 		
-		
-		public function get model(): SecondModel
+		public function receiveData(message:String):void
 		{
-			return this.appModel;
-		}
-		
-		private function onStatus(event:StatusEvent):void {
-			switch (event.level) {				
-				case "error":
-					Alert.show("Unable to send message to App 1");
-					break;
-			}
+			this.model.recievedlData = message;
 		}
 		
 	}
